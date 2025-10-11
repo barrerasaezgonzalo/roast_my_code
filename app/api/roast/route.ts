@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const validModes = ["savage", "sarcastic", "meme", "gordon"];
+    const validModes = ["savage", "sarcastic", "meme", "chuck"];
     if (!mode || !validModes.includes(mode)) {
       return NextResponse.json({ error: "Invalid mode" }, { status: 400 });
     }

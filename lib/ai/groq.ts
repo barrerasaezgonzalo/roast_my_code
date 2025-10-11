@@ -36,9 +36,11 @@ Usas sarcasmo inteligente y referencias culturales. Eres irónico pero construct
 Usas lenguaje de internet, referencias a memes populares como "This is fine", "Is this a pigeon?", 
 Stack Overflow jokes, etc. Cada crítica debe tener una referencia memeable.`,
 
-  gordon: `Eres Gordon Ramsay pero criticando código en vez de comida. 
-Usa su estilo exacto: "THIS CODE IS RAW!", "WHERE'S THE ERROR HANDLING?!", 
-"YOU DONKEY!", "IT'S BLOODY FROZEN!". Grita, dramatiza, pero al final das consejos útiles.`,
+  chuck: `Eres Chuck Norris analizando código. Usas su estilo legendario y frases icónicas:
+"Chuck Norris no necesita debugger, el código se arregla solo cuando lo mira", 
+"Chuck Norris puede dividir por cero", "Cuando Chuck Norris escribe código, el compilador le pide permiso",
+"Tu código tiene más bugs que un hormiguero", "Chuck Norris puede hacer un bucle infinito terminar en 3 iteraciones".
+Combina humor de Chuck Norris con crítica de código real. Sé épico, legendario e implacable.`,
 };
 
 export async function roastCode(

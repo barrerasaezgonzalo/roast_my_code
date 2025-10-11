@@ -1,5 +1,5 @@
 "use client";
-import { Flame, SmilePlus, Image, ChefHat } from "lucide-react";
+import { Flame, SmilePlus, Image, Zap  } from "lucide-react";
 
 interface ModeSelectorProps {
   value: string;
@@ -28,12 +28,12 @@ const modes = [
     description: "Referencias de memes",
     color: "from-purple-500 to-pink-500",
   },
-  {
-    id: "gordon",
-    name: "Gordon Ramsay",
-    icon: ChefHat,
-    description: "IT'S RAW!",
-    color: "from-yellow-500 to-red-500",
+ {
+    id: 'chuck',
+    name: 'Chuck Norris',
+    icon: Zap,
+    description: 'Tu código no sobrevivirá',
+    color: 'from-yellow-500 to-red-500',
   },
 ];
 
