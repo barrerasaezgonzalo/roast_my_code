@@ -1,9 +1,7 @@
 import Groq from "groq-sdk";
 
 const groq = new Groq({
-  apiKey:
-    process.env.GROQ_API_KEY ||
-    "REDACTED_KEY",
+  apiKey: process.env.GROQ_API_KEY,
 });
 
 export interface LineIssue {
