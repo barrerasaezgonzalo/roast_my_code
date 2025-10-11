@@ -4,6 +4,7 @@ import RoastResult from "@/components/roast/RoastResult";
 import { Flame, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import ShareButton from "@/components/roast/ShareButton";
+import Comments from "@/components/roast/Comments";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -80,6 +81,10 @@ export default async function RoastDetailPage({ params }: PageProps) {
           code={roast.code}
           language={roast.language}
         />
+
+       <div className="mt-8">
+  <Comments roastId={roast.id} />
+</div>
 
         {/* Footer info */}
         <div className="mt-8 text-center text-gray-500 text-sm">
