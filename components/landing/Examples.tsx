@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { ThumbsUp, MessageSquare, Share2 } from "lucide-react";
 
 const examples = [

@@ -1,21 +1,64 @@
 "use client";
-import { useState } from "react";
-import { Flame, Menu, X, Zap } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Flame, Menu, X, Zap, LogOut, User } from "lucide-react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 import AuthModal from "../landing/AuthModal";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<"signup" | "login">("signup");
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // TODO: Reemplazar con hook useAuth real cuando implementemos Supabase
-  const isLoggedIn = false;
+  const supabase = createClient();
+
+  useEffect(() => {
+    // Obtener usuario actual
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    // Escuchar cambios de autenticación
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase]);
 
   const handleAuthClick = (mode: "signup" | "login") => {
     setAuthMode(mode);
     setShowAuthModal(true);
     setIsMenuOpen(false);
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setIsMenuOpen(false);
+    window.location.href = "/";
+  };
+
+  // Obtener iniciales del usuario
+  const getUserInitials = () => {
+    if (user?.user_metadata?.full_name) {
+      return user.user_metadata.full_name
+        .split(" ")
+        .map((n: string) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2);
+    }
+    if (user?.email) {
+      return user.email[0].toUpperCase();
+    }
+    return "U";
   };
 
   return (
@@ -50,7 +93,9 @@ export default function Navbar() {
                 Try AI
               </Link>
 
-              {isLoggedIn ? (
+              {loading ? (
+                <div className="w-8 h-8 rounded-full bg-gray-700 animate-pulse" />
+              ) : user ? (
                 <div className="flex items-center gap-4">
                   <Link
                     href="/dashboard"
@@ -58,7 +103,36 @@ export default function Navbar() {
                   >
                     Dashboard
                   </Link>
-                  <button className="w-8 h-8 rounded-full bg-gradient-to-br from-red-500 to-orange-500" />
+
+                  {/* User Menu */}
+                  <div className="relative group">
+                    <button className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center font-bold text-sm hover:scale-110 transition-transform">
+                      {getUserInitials()}
+                    </button>
+
+                    {/* Dropdown */}
+                    <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                      <div className="p-3 border-b border-gray-700">
+                        <p className="text-sm font-semibold truncate">
+                          {user.email}
+                        </p>
+                      </div>
+                      <Link
+                        href="/dashboard"
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors"
+                      >
+                        <User className="w-4 h-4" />
+                        Mi Dashboard
+                      </Link>
+                      <button
+                        onClick={handleSignOut}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:bg-gray-700 transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Cerrar Sesión
+                      </button>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <>
@@ -113,8 +187,14 @@ export default function Navbar() {
               </Link>
 
               <div className="pt-4 border-t border-gray-800 space-y-3">
-                {isLoggedIn ? (
+                {user ? (
                   <>
+                    <div className="px-4 py-2 bg-gray-800 rounded-lg">
+                      <p className="text-sm text-gray-400">Conectado como</p>
+                      <p className="text-sm font-semibold truncate">
+                        {user.email}
+                      </p>
+                    </div>
                     <Link
                       href="/dashboard"
                       onClick={() => setIsMenuOpen(false)}
@@ -122,8 +202,11 @@ export default function Navbar() {
                     >
                       Dashboard
                     </Link>
-                    <button className="w-full text-left text-gray-300 hover:text-white transition-colors font-medium py-2">
-                      Sign Out
+                    <button
+                      onClick={handleSignOut}
+                      className="w-full text-left text-red-400 hover:text-red-300 transition-colors font-medium py-2"
+                    >
+                      Cerrar Sesión
                     </button>
                   </>
                 ) : (

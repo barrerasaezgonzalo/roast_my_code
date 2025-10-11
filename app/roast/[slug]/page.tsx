@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import RoastResult from "@/components/roast/RoastResult";
-import { Flame, ArrowLeft, Share2 } from "lucide-react";
+import { Flame, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import ShareButton from "@/components/roast/ShareButton";
 

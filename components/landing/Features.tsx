@@ -1,12 +1,4 @@
-import {
-  MessageSquare,
-  Zap,
-  Trophy,
-  Code2,
-  Shield,
-  Sparkles,
-  Brain,
-} from "lucide-react";
+import { Zap, Trophy, Code2, Shield, Sparkles, Brain } from "lucide-react";
 
 const features = [
   {

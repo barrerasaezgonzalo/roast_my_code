@@ -76,13 +76,45 @@ function example() {
             <span className="text-gray-400">
               Líneas: {code.split("\n").length}
             </span>
-            <span className="text-gray-400">Caracteres: {code.length}</span>
+            <span
+              className={`font-semibold ${
+                code.length < 10
+                  ? "text-red-400"
+                  : code.length > 5000
+                    ? "text-red-400"
+                    : "text-green-400"
+              }`}
+            >
+              {code.length} / 5000
+            </span>
             <span className="text-gray-400">
               Lenguaje:{" "}
               <span className="text-white font-semibold">{language}</span>
             </span>
           </div>
         </div>
+
+        {/* Validation Messages */}
+        {code.length < 10 && (
+          <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 text-sm text-yellow-400 flex items-center gap-2">
+            <span>⚠️</span>
+            <span>Mínimo 10 caracteres requeridos</span>
+          </div>
+        )}
+
+        {code.length > 5000 && (
+          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-sm text-red-400 flex items-center gap-2">
+            <span>❌</span>
+            <span>Excede el máximo de 5000 caracteres</span>
+          </div>
+        )}
+
+        {code.length >= 10 && code.length <= 5000 && (
+          <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 text-sm text-green-400 flex items-center gap-2">
+            <span>✅</span>
+            <span>Listo para roast</span>
+          </div>
+        )}
       </div>
 
       {/* Settings Panel - 1/3 */}

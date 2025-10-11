@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { RoastResponse } from "@/lib/ai/groq";
-import ShareButton from "./ShareButton";
 
 interface RoastResultProps {
   result: RoastResponse;
@@ -17,11 +16,7 @@ interface RoastResultProps {
   language: string;
 }
 
-export default function RoastResult({
-  result,
-  code,
-  language,
-}: RoastResultProps) {
+export default function RoastResult({ result }: RoastResultProps) {
   const router = useRouter();
 
   const getSeverityIcon = (severity: string) => {

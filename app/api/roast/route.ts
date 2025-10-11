@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { roastCode } from "@/lib/ai/groq";
 import { createClient } from "@supabase/supabase-js";
 
-// Cliente SIN tipos genéricos
-const supabase = createClient(
+const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_KEY!,
 );
@@ -59,6 +58,33 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid mode" }, { status: 400 });
     }
 
+    // Obtener usuario actual desde el token de autorización
+    let userId: string | null = null;
+    try {
+      const authHeader = request.headers.get("authorization");
+
+      if (authHeader && authHeader.startsWith("Bearer ")) {
+        const token = authHeader.substring(7);
+
+        const {
+          data: { user },
+          error,
+        } = await supabaseAdmin.auth.getUser(token);
+
+        if (!error && user) {
+          userId = user.id;
+          console.log("👤 Usuario logueado:", user.email);
+        } else {
+          console.log("👤 Usuario anónimo (token inválido o expirado)");
+        }
+      } else {
+        console.log("👤 Usuario anónimo (sin token)");
+      }
+    } catch (err) {
+      console.log("⚠️ Error al verificar usuario:", err);
+      console.log("👤 Continuando como anónimo");
+    }
+
     console.log("🔥 Roasting code with Groq AI...");
 
     const roastResult = await roastCode(code, language, mode);
@@ -67,7 +93,7 @@ export async function POST(request: NextRequest) {
     let attempts = 0;
 
     while (attempts < 5) {
-      const { data: existing } = await supabase
+      const { data: existing } = await supabaseAdmin
         .from("roasts")
         .select("id")
         .eq("shareable_slug", slug)
@@ -80,7 +106,7 @@ export async function POST(request: NextRequest) {
 
     console.log("💾 Saving to Supabase...");
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("roasts")
       .insert({
         code,
@@ -91,6 +117,7 @@ export async function POST(request: NextRequest) {
         is_public: true,
         shareable_slug: slug,
         ip_address: getClientIP(request),
+        user_id: userId,
       })
       .select()
       .single();
@@ -100,7 +127,12 @@ export async function POST(request: NextRequest) {
       throw new Error("Error al guardar en la base de datos");
     }
 
-    console.log("✅ Roast saved successfully!", data.id);
+    console.log(
+      "✅ Roast saved successfully! ID:",
+      data.id,
+      "User:",
+      userId || "anonymous",
+    );
 
     return NextResponse.json({
       success: true,

@@ -3,9 +3,22 @@ import { useState } from "react";
 import { Flame, ChevronRight, Sparkles, Zap } from "lucide-react";
 import AuthModal from "./AuthModal";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Hero() {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const supabase = createClient();
+
+  const handleLogin = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      setShowAuthModal(true);
+    } else {
+      window.location.href = "/roast";
+    }
+  };
 
   return (
     <>
@@ -56,7 +69,7 @@ export default function Hero() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
             <button
-              onClick={() => setShowAuthModal(true)}
+              onClick={() => handleLogin()}
               className="group bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 px-8 py-4 rounded-xl font-bold text-lg flex items-center gap-3 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-red-500/30 hover:shadow-red-500/50"
             >
               <Flame className="w-5 h-5 group-hover:animate-flame" />

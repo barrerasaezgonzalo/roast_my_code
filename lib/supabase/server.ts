@@ -16,6 +16,7 @@ export async function createClient() {
           try {
             cookieStore.set(name, value, options);
           } catch (error) {
+            console.log(error);
             // En Server Components las cookies son read-only
           }
         },
@@ -23,6 +24,7 @@ export async function createClient() {
           try {
             cookieStore.set(name, "", { ...options, maxAge: 0 });
           } catch (error) {
+            console.log(error);
             // En Server Components las cookies son read-only
           }
         },

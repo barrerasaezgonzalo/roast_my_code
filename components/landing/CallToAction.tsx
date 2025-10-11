@@ -2,10 +2,22 @@
 import { useState } from "react";
 import { Flame, Sparkles } from "lucide-react";
 import AuthModal from "./AuthModal";
+import { createClient } from "@/lib/supabase/client";
 
 export default function CallToAction() {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const supabase = createClient();
 
+  const handleLogin = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      setShowAuthModal(true);
+    } else {
+      window.location.href = "/roast";
+    }
+  };
   return (
     <>
       <section className="py-20 px-4 relative overflow-hidden">
@@ -32,7 +44,7 @@ export default function CallToAction() {
           </p>
 
           <button
-            onClick={() => setShowAuthModal(true)}
+            onClick={() => handleLogin()}
             className="bg-white text-red-600 hover:bg-gray-100 px-10 py-5 rounded-xl font-bold text-xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-white/20"
           >
             Comenzar Gratis

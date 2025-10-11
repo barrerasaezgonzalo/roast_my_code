@@ -22,7 +22,7 @@ export default function RoastPage() {
           </p>
           <p className="text-gray-400 text-lg">
             Inicia sessión para particular en el Leaderboard, y ganar puntos y
-            poder compartir tus resultados.
+            poder compartir tus resultados desde tu dashboard.
           </p>
         </div>
 

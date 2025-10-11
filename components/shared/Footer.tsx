@@ -1,12 +1,4 @@
-import {
-  Flame,
-  Github,
-  Twitter,
-  Linkedin,
-  Mail,
-  Heart,
-  Zap,
-} from "lucide-react";
+import { Flame, Github, Mail, Zap } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
@@ -94,7 +86,7 @@ export default function Footer() {
           {/* Social Links - Ahora con Link para internos y a tag para externos */}
           <div className="flex items-center gap-4">
             <a
-              href="https://github.com"
+              href="https://github.com/barrerasaezgonzalo/roast_my_code"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-white transition-colors"
@@ -102,28 +94,6 @@ export default function Footer() {
             >
               <Github className="w-5 h-5" />
               <span className="sr-only">GitHub</span>
-            </a>
-
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors"
-              aria-label="Twitter"
-            >
-              <Twitter className="w-5 h-5" />
-              <span className="sr-only">Twitter</span>
-            </a>
-
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors"
-              aria-label="LinkedIn"
-            >
-              <Linkedin className="w-5 h-5" />
-              <span className="sr-only">Linkedin</span>
             </a>
 
             <a
